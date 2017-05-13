@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\Html;
 use app\models\profile;
 
@@ -8,7 +9,7 @@ use app\models\profile;
 
 <header class="main-header">
 
-    <?= Html::a('<span class="logo-mini">APP</span><span class="logo-lg">' . Yii::$app->name . '</span>', Yii::$app->homeUrl, ['class' => 'logo']) ?>
+<?= Html::a('<span class="logo-mini">APP</span><span class="logo-lg">' . Yii::$app->name . '</span>', Yii::$app->homeUrl, ['class' => 'logo']) ?>
 
     <nav class="navbar navbar-static-top" role="navigation">
 
@@ -227,50 +228,63 @@ use app\models\profile;
                     </ul>
                 </li>
                 <!-- User Account: style can be found in dropdown.less -->
-                
-                <?php 
-                if(Yii::$app->user->identity ){
+
+                <?php
+                if (Yii::$app->user->identity) {
                     $id = Yii::$app->user->identity->id;
-                    $profile = profile::find()->where(['user_id' => $id])->one();                    
+                    $profile = profile::find()->where(['user_id' => $id])->one();
                 }
                 ?>
 
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="user-image" alt="User Image"/>
-                        <span class="hidden-xs"><?= (Yii::$app->user->identity ? $profile->fullname:'Guest'); ?></span>
+                        <?php
+                        if (Yii::$app->user->identity) {
+                            echo Html::img($profile->getPhotoViewer(), ['width:100px;', 'class' => 'user-image']);
+                        }
+                        ?>
+                        <span class="hidden-xs"><?= (Yii::$app->user->identity ? $profile->fullname : 'Guest'); ?></span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
-                            <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle"
-                                 alt="User Image"/>
+
+                            <?php
+                            if (Yii::$app->user->identity) {
+                                echo Html::img($profile->getPhotoViewer(), ['width:100px;', 'class' => 'img-circle']);
+                            } else {
+                                ?>
+                                <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle"
+                                     alt="User Image"/>
+                                     <?php
+                                 }
+                                 ?>
 
                             <p>
-                                <?= (Yii::$app->user->identity ? $profile->fullname."<small>".$profile->dep."</small>":'Guest'."<small>บุคคลทั่วไป</small>");?>
-                                
+                                <?= (Yii::$app->user->identity ? $profile->fullname . "<small>" . $profile->dep . "</small>" : 'Guest' . "<small>บุคคลทั่วไป</small>"); ?>
+
                             </p>
                         </li>
                         <!-- Menu Body -->
-<!--                        <li class="user-body">
-                            <div class="col-xs-4 text-center">
-                                <a href="#">Followers</a>
-                            </div>
-                            <div class="col-xs-4 text-center">
-                                <a href="#">Sales</a>
-                            </div>
-                            <div class="col-xs-4 text-center">
-                                <a href="#">Friends</a>
-                            </div>
-                        </li>-->
+                        <!--                        <li class="user-body">
+                                                    <div class="col-xs-4 text-center">
+                                                        <a href="#">Followers</a>
+                                                    </div>
+                                                    <div class="col-xs-4 text-center">
+                                                        <a href="#">Sales</a>
+                                                    </div>
+                                                    <div class="col-xs-4 text-center">
+                                                        <a href="#">Friends</a>
+                                                    </div>
+                                                </li>-->
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <?= (Yii::$app->user->identity ? Html::a('Profile',['/profile'],['data-method' => 'post', 'class' => 'btn btn-default btn-flat']):'');?>
-                                 <?php //= Html::a('Profile',['/profile'],['data-method' => 'post', 'class' => 'btn btn-default btn-flat']) ?>
+                                <?= (Yii::$app->user->identity ? Html::a('Profile', ['/profile'], ['data-method' => 'post', 'class' => 'btn btn-default btn-flat']) : ''); ?>
+                                <?php //= Html::a('Profile',['/profile'],['data-method' => 'post', 'class' => 'btn btn-default btn-flat']) ?>
                             </div>
                             <div class="pull-right">                                
-                                <?= (Yii::$app->user->identity ? Html::a('Sign out',['/site/logout'],['data-method' => 'post', 'class' => 'btn btn-default btn-flat']) :Html::a('Login',['/site/login'],['data-method' => 'post', 'class' => 'btn btn-default btn-flat'])); ?>
+                                <?= (Yii::$app->user->identity ? Html::a('Sign out', ['/site/logout'], ['data-method' => 'post', 'class' => 'btn btn-default btn-flat']) : Html::a('Login', ['/site/login'], ['data-method' => 'post', 'class' => 'btn btn-default btn-flat'])); ?>
                             </div>
                         </li>
                     </ul>

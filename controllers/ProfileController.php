@@ -14,6 +14,7 @@ use yii\filters\VerbFilter;
 use yii\base\Model;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
+use yii\web\UploadedFile;
 
 /**
  * ProfileController implements the CRUD actions for Profile model.
@@ -27,10 +28,10 @@ class ProfileController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete', 'suspend', 'enableuser'], //action ทั้งหมดที่มี
+//                'only' => ['index','index_admin', 'view', 'create', 'update', 'delete', 'suspend', 'enableuser'], //action ทั้งหมดที่มี
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'suspend', 'enableuser'],
+//                        'actions' => ['index','index_admin', 'view', 'create', 'update', 'delete', 'suspend', 'enableuser'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -44,7 +45,7 @@ class ProfileController extends Controller {
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-//                    'delete' => ['POST'],
+                    'delete' => ['POST'],
                 ],
             ],
         ];
@@ -55,6 +56,16 @@ class ProfileController extends Controller {
      * @return mixed
      */
     public function actionIndex() {
+
+        $modelUser = $this->findModelUser(Yii::$app->user->identity->id);
+        $model = Profile::find()->where(['user_id' => $modelUser->id])->one();
+        return $this->render('index', [
+                    'model' => $model,
+                    'modelUser' => $modelUser,
+        ]);
+    }
+
+    public function actionIndex_admin() {
         $query = Profile::find();
 
 
@@ -76,7 +87,7 @@ class ProfileController extends Controller {
                 ->limit($pagination->limit)
                 ->all();
 
-        return $this->render('index', [
+        return $this->render('index_admin', [
                     'models' => $models,
 //                    'modelUser' => $modelUser,
                     'pagination' => $pagination,
@@ -132,6 +143,13 @@ class ProfileController extends Controller {
         $model = new Profile();
         $modelUser = new Userdt();
 
+        if (Yii::$app->request->isAjax && $modelUser->load(Yii::$app->request->post())) {
+
+            $model->load(Yii::$app->request->post());
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($modelUser, $model);
+        }
+
         if ($model->load(Yii::$app->request->post()) &&
                 $modelUser->load(Yii::$app->request->post()) &&
                 Model::validateMultiple([$model, $modelUser])) {
@@ -143,11 +161,12 @@ class ProfileController extends Controller {
             $modelUser->save();
 
             $model->user_id = $modelUser->id;
+            $model->img = $model->upload($model, 'img');
             $model->save();
 
-            return $this->redirect(['index', 'id' => $model->id]);
+            return $this->redirect(['index_admin', 'id' => $model->id]);
         } else {
-            return $this->render('create', [
+            return $this->renderAjax('create', [
                         'model' => $model,
                         'modelUser' => $modelUser,
             ]);
@@ -175,51 +194,40 @@ class ProfileController extends Controller {
     public function actionUpdate($id) {
 
         $model = $this->findModel($id);
-        //$modelUser = $this->findModelUser($model->user_id);
-        // $oldPass = $modelUser->password_hash;
-//        if ($model->load(Yii::$app->request->post()) && \yii\validators
-//                //$modelUser->load(Yii::$app->request->post()) &&
-//                //Model::validateMultiple([$model, $modelUser])) {
-//            if (!($modelUser->password_hash == $oldPass)) {
-//                $modelUser->password_hash = Yii::$app->security->generatePasswordHash($modelUser->password_hash);
-//            }
-//            if ($modelUser->save()) {
-//                $model->save();
-//            }
-//            return $this->redirect(['index', 'id' => $model->id]);
-//        } else {
-//            return $this->renderAjax('update', [
-//                        'model' => $model,
-//                        'modelUser' => $modelUser,
-//            ]);
-//        }
+        $modelUser = $this->findModelUser($model->user_id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            $modelUser->load(Yii::$app->request->post());
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model, $modelUser);
+        }
+
+        $imgOld = $model->img;
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $photo = UploadedFile::getInstance($model, 'img');
+            $path = $model->getUploadPath();
+
+            if ($model->validate() && $photo !== null) {
+                $fileName = md5($photo->baseName . time()) . '.' . $photo->extension;
+                //$fileName = $photo->baseName . '.' . $photo->extension;
+                $photo->saveAs($path . $fileName);
+                $model->img = $fileName;
+                if ($imgOld) {
+                    $model->delphoto($imgOld);
+                }
+            } else {
+                $model->img = $imgOld;
+            }
+            $model->save();
+            if ($modelUser->load(Yii::$app->request->post()) && $model->validate()) {
+                $modelUser->save();
+            }
+            Yii::$app->session->setFlash('success', 'บันทักเรียบร้อย');
             return $this->redirect(['index', 'id' => $model->id]);
         } else {
             return $this->renderAjax('update', [
                         'model' => $model,
-            ]);
-        }
-    }
-
-    public function actionUpdateusername($id) {
-
-        $model = $this->findModel($id);
-        $modelUser = $this->findModelUser($model->user_id);
-        $oldPass = $modelUser->password_hash;
-
-
-
-        if ($modelUser->load(Yii::$app->request->post())) {
-            if (!($modelUser->password_hash == $oldPass)) {
-                $modelUser->password_hash = Yii::$app->security->generatePasswordHash($modelUser->password_hash);
-            }
-            if ($modelUser->save()) {
-                return $this->redirect(['index', 'id' => $model->id]);
-            }
-        } else {
-            return $this->renderAjax('updateusername', [
                         'modelUser' => $modelUser,
             ]);
         }
@@ -231,10 +239,12 @@ class ProfileController extends Controller {
         $modelUser = $this->findModelUser($model->user_id);
         $oldPass = $modelUser->password_hash;
         $modelUser->password_hash = Yii::$app->security->generatePasswordHash('password');
-//        $modelUser->save();  
-        Yii::$app->session->setFlash('success', 'Reset Password เรียบร้อย');
-        return $this->redirect(['index', 'masss' => $model->username . '-' . 'password'.'-'.$modelUser->password_hash]);
-        
+        if ($modelUser->save()) {
+            Yii::$app->session->setFlash('success', 'Reset Password เรียบร้อย');
+            return $this->redirect(['index', 'masss' => $model->username . '-' . 'password' . '-' . $modelUser->password_hash]);
+        }
+        Yii::$app->session->setFlash('success', 'NOT Save');
+        return $this->redirect(['index', 'masss' => $model->username . '-' . 'password' . '-' . $modelUser->password_hash]);
     }
 
     public function actionUpdatedep($id) {
@@ -262,7 +272,7 @@ class ProfileController extends Controller {
         $modelUser->status = 0;
         $modelUser->save();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['index_admin']);
     }
 
     public function actionEnableuser($id) {
@@ -270,14 +280,17 @@ class ProfileController extends Controller {
         $modelUser = $this->findModelUser($modelProfile->user_id);
         $modelUser->status = 10;
         $modelUser->save();
-        return $this->redirect(['index']);
+        return $this->redirect(['index_admin']);
     }
 
     public function actionDelete($id) {
         $modelUser = $this->findModel($id);
         $this->findModelUser($modelUser->user_id)->delete();
+        $model = $this->findModel($id);
+        if ($model->img) {
+            $model->delphoto($model->img);
+        }
         $this->findModel($id)->delete();
-
         return $this->redirect(['index']);
     }
 

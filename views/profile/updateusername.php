@@ -15,6 +15,7 @@ use yii\helpers\ArrayHelper;
         <div class="box-body">
             <?php
             $form = ActiveForm::begin([
+                'enableAjaxValidation' => true,
                         'options' => [
                             'enctype' => 'multipart/form-data',
                             'class' => 'form-horizontal'

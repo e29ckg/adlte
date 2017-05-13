@@ -45,8 +45,8 @@
                                 ['label' => 'ปฏิทินงาน', 'icon' => 'calendar', 'url' => ['/event'],],
                                 ['label' => 'ข้อมูลผู้ใช้','icon' => 'users','url' => ['/profile'],
                                     'items' => [
-                                        ['label' => 'ผู้ใช้งานทั้งหมด', 'icon' => 'wrench', 'url' => ['/profile/index'],],
-                                        ['label' => 'เพิ่มผู้ใช้งาน', 'icon' => 'wrench', 'url' => ['/profile/create'],],    
+                                        ['label' => 'Profile', 'icon' => 'wrench', 'url' => ['/profile/index'],],
+                                        ['label' => 'ผู้ใช้งานทั้งหมด', 'icon' => 'wrench', 'url' => ['/profile/index_admin'],],  
                                         ['label' => 'ตั้งค่าตำแหน่ง', 'icon' => 'wrench', 'url' => ['/profile/indexdep'],]
                                     ]],
                             ],

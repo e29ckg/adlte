@@ -18,7 +18,7 @@ class m170423_013129_create_event extends Migration {
     }
 
     public function down() {    
-         $this->delete('event', ['id' => 1]);
+//        $this->delete('event', ['id' => 1]);
         $this->dropTable('event');        
     }
 }

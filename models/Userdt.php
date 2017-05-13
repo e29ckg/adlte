@@ -34,7 +34,8 @@ class Userdt extends \yii\db\ActiveRecord
     {
         return [
             [['username'], 'required'],
-            [['username'], 'unique','targetAttribute' => ['username'], 'message' => 'Username must be unique.'],
+//            [['username'], 'unique','targetAttribute' => ['username'], 'message' => 'Username must be unique.'],
+            ['username', 'unique', 'message' => 'UserName ซ้ำ'],
             [['status'], 'integer'],
             [['username', 'password_hash', 'password_reset_token', 'email'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
@@ -70,7 +71,7 @@ class Userdt extends \yii\db\ActiveRecord
     }
     
     public function getProfile() {
-        return $this->hasOne(profile::className(), ['id' => 'user_id']);
+        return $this->hasOne(profile::className(), ['user_id' => 'id']);
     }
     
     public function getFullname(){

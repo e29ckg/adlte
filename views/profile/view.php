@@ -70,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             </tr>
                             <tr>
                                 <td class="text-right" >รูป</td>
-                                <td class="text-left" ></td>                            
+                                <td class="text-left" ><?= Html::img($model->getPhotoViewer(), ['style' => 'width:100px;', 'class' => 'img-rounded']); ?></td>                            
                             </tr>                        
                             <tr>
                                 <td class="text-right" >สถานะ</td>
