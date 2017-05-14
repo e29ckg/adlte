@@ -241,8 +241,13 @@ use app\models\profile;
                         <?php
                         if (Yii::$app->user->identity) {
                             echo Html::img($profile->getPhotoViewer(), ['width:100px;', 'class' => 'user-image']);
-                        }
-                        ?>
+                        }else{
+                                ?>
+                                <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="user-image"
+                                     alt="User Image"/>
+                                     <?php
+                                 }
+                                 ?>
                         <span class="hidden-xs"><?= (Yii::$app->user->identity ? $profile->fullname : 'Guest'); ?></span>
                     </a>
                     <ul class="dropdown-menu">

@@ -291,7 +291,7 @@ class ProfileController extends Controller {
             $model->delphoto($model->img);
         }
         $this->findModel($id)->delete();
-        return $this->redirect(['index']);
+        return $this->redirect(['index_admin']);
     }
 
     /**

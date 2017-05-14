@@ -20,24 +20,32 @@ Modal::end();
 ?>
 
 <section class="content">
+    <!--<div class="row">-->
+    <!--<div class="pad margin no-print">-->
+    <!--            <div class="callout callout-info" style="margin-bottom: 0!important;">
+                    <h4><i class="fa fa-info"></i> Note:</h4>
+                    <marquee scrollamount="5"><h4>ความเร็วในการวิ่ง 5 ทดสอบอักษรวิ่ง
+                            This page has been enhanced for printing. Click the print button at the bottom of the invoice to test.
+                        </h4>
+                    </marquee>
+                </div>-->
+    <!--</div>-->
+    <!--</div>-->
     <div class="row">
-        <div class="pad margin no-print">
-            <div class="callout callout-info" style="margin-bottom: 0!important;">
-                <h4><i class="fa fa-info"></i> Note:</h4>
-                <marquee scrollamount="5"><h4>ความเร็วในการวิ่ง 5 ทดสอบอักษรวิ่ง
-                        This page has been enhanced for printing. Click the print button at the bottom of the invoice to test.
-                    </h4>
-                </marquee>
-            </div>
+        <div class="col-md-12">
+        <div class="callout callout-info" style="margin-bottom: 10px">
+            <h4><i class="fa fa-info"></i> Note:</h4>
+            <marquee scrollamount="5"><h4>ความเร็วในการวิ่ง 5 ทดสอบอักษรวิ่ง
+                    This page has been enhanced for printing. Click the print button at the bottom of the invoice to test.
+                </h4>
+            </marquee>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
+            </div>
+        <div class="col-md-4">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">ประกาศล่าสุด!</a></li>
                     <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">หนังสือทราบทั่วกัน</a></li>
-                    <li class=""><a href="#tab_3" data-toggle="tab" aria-expanded="false">ตารางเวร</a></li>
 
                     <li class="pull-right"><a href="#" class="text-muted"><i class="fa fa-gear"></i></a></li>
 
@@ -98,37 +106,13 @@ Modal::end();
 
                     </div>
                     <!-- /.tab-pane -->
-                    <div class="tab-pane" id="tab_3">
-                        <div class="box-body">
-                            <ul class="products-list product-list-in-box">
-                                <!--/.item -->
-                                <?php foreach ($judC as $judCC) { ?>
-                                    <li class="item">
-                                        <div class="product-img">
-                                            <img src="dist/img/default-50x50.gif" alt="Product Image">
-                                        </div> 
-                                        <div class="product-info">
-                                            <a href="javascript:void(0)" class="product-title"><?= $judCC->red_number; ?>
-                                                <!--<span class="label label-warning pull-right">$1800</span>-->
-                                            </a>
-                                            <span class="product-description">
-                                                <?= $judCC->create_at; ?>
-                                            </span>
-                                        </div>
-                                    </li>
-                                <?php } ?>
-                            </ul>
-                        </div>
-                        <div class="box-footer text-center">
-                            <a href="?r=judgement/all" class="uppercase">ดูทั้งหมด</a>
-                        </div>
-                    </div>
+
                     <!-- /.tab-pane -->
                 </div>
                 <!-- /.tab-content -->
             </div>
         </div>
-        <div class="col-md-6">    
+        <div class="col-md-8">    
             <div class="box box-info">
                 <div class="box-header with-border">
                     <h3 class="box-title">ปฏิทินกิจกรรม</h3>

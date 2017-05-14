@@ -27,7 +27,9 @@
         "2amigos/yii2-date-time-picker-widget": "~1.0",
         "yiidoc/yii2-redactor": "*",
         "fedemotta/yii2-widget-datatables": "*",
-        "yii2mod/yii2-sweet-alert": "*"
+        "yii2mod/yii2-sweet-alert": "*",
+        "2amigos/yii2-ckeditor-widget": "^2.0",
+        "bizley/quill": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

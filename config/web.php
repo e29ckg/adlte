@@ -11,7 +11,7 @@ $config = [
         'redactor' => 'yii\redactor\RedactorModule',
         'class' => 'yii\redactor\RedactorModule',
         'uploadDir' => '@webroot/uploads',
-        'uploadUrl' => '/hello/uploads',
+        'uploadUrl' => '@web/uploads',
         'gridview' => [
             'class' => '\kartik\grid\Module'
         // enter optional module parameters below - only if you need to  

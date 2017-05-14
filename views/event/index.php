@@ -28,6 +28,55 @@ Modal::end();
 <section class="content">
     <div class="row">
 
+        <div class="">
+            <div class="box box-primary">
+                <div class="box-body no-padding">
+                    <?=
+                    yii2fullcalendar\yii2fullcalendar::widget([
+                        'options' => [
+                            'lang' => 'th',
+                        //... more options to be defined here!
+                        ],
+                        'clientOptions' => [
+                            'height' => 500,
+                            'language' => 'th',
+                            //'eventLimit' => TRUE,
+                            'selectable' => true,
+                            'selectHelper' => true,
+                            'droppable' => true,
+                            'editable' => true,
+//          'theme'=>true,
+                            'fixedWeekCount' => false,
+                            'defaultDate' => date('Y-m-d'),
+                            'eventClick' => new JsExpression('function(calEvent, jsEvent, view) {
+                            //alert("Event: " + calEvent.id);
+                            //alert("Event: " + calEvent.title);
+                            //alert("Coordinates: " + jsEvent.pageX + "," + jsEvent.pageY);
+                            //alert("View: " + view.name);
+                            // change the border color just for fun                            
+                            $(this).css("border-color", "red");
+                                    $.get(
+                                        "?r=event/update",
+                                        {
+                                            id: calEvent.id
+                                        },
+                                        function (data)
+                                        {
+                                            $("#activity-modal").find(".modal-body").html(data);
+                                            $(".modal-body").html(data);
+                                            $(".modal-title").html("Event");
+                                            $("#activity-modal").modal("show");
+                                        }
+                                    );
+            }'),
+//          'select'=>new JsExpression($JSCode)
+                        ],
+                        'events' => $events
+                    ]);
+                    ?>
+                </div>                  
+            </div>
+        </div>
 
         <div class="box box-info">
             <div class="box-header with-border">
@@ -36,7 +85,7 @@ Modal::end();
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                 </div>
-            </div>
+            </div>  
             <div class="box-body">
                 <div class="">
                     <?=
@@ -74,7 +123,7 @@ Modal::end();
                                                 'data-pjax' => '0',
                                     ]);
                                 },
-                                        'update' => function ($url, $model, $key) {
+                                'update' => function ($url, $model, $key) {
                                     return Html::a('<span class="glyphicon glyphicon-pencil"></span> แก้ไข', '#', [
                                                 'class' => 'activity-update-link btn btn-default',
                                                 //'title' => 'แก้ไขข้อมูล',
@@ -84,7 +133,7 @@ Modal::end();
                                                 'data-pjax' => '0',
                                     ]);
                                 },
-                                        'delete' => function ($url, $model, $key) {
+                                'delete' => function ($url, $model, $key) {
                                     return Html::a('<span class="glyphicon glyphicon-trash"></span> ลบ', $url, [
                                                 'class' => 'activity-delete-link btn btn-danger',
                                                 //'title' => Yii::t('yii', 'ลบข้อมูล'),
@@ -92,80 +141,23 @@ Modal::end();
                                                 'data-method' => 'post',
                                     ]);
                                 },
-                                    ]
-                                ],
-                            ],
-                        ]);
-                        ?>
+                            ]
+                        ],
+                    ],
+                ]);
+                ?>
 
-                    </div>
-                </div>
-
-
-
-
-
-                <div class="">
-                    <div class="box box-primary">
-                        <div class="box-body no-padding">
-                            <?=
-                            yii2fullcalendar\yii2fullcalendar::widget([
-                                'options' => [
-                                    'lang' => 'th',
-                                //... more options to be defined here!
-                                ],
-                                'clientOptions' => [
-                                    'height' => 500,
-                                    'language' => 'th',
-                                    //'eventLimit' => TRUE,
-                                    'selectable' => true,
-                                    'selectHelper' => true,
-                                    'droppable' => true,
-                                    'editable' => true,
-//          'theme'=>true,
-                                    'fixedWeekCount' => false,
-                                    'defaultDate' => date('Y-m-d'),
-                                    'eventClick' => new JsExpression('function(calEvent, jsEvent, view) {
-                            //alert("Event: " + calEvent.id);
-                            //alert("Event: " + calEvent.title);
-                            //alert("Coordinates: " + jsEvent.pageX + "," + jsEvent.pageY);
-                            //alert("View: " + view.name);
-                            // change the border color just for fun                            
-                            $(this).css("border-color", "red");
-                                    $.get(
-                                        "?r=event/view",
-                                        {
-                                            id: calEvent.id
-                                        },
-                                        function (data)
-                                        {
-                                            $("#activity-modal").find(".modal-body").html(data);
-                                            $(".modal-body").html(data);
-                                            $(".modal-title").html("Event");
-                                            $("#activity-modal").modal("show");
-                                        }
-                                    );
-            }'),
-//          'select'=>new JsExpression($JSCode)
-                                ],
-                                'events' => $events
-                            ]);
-                            ?>
-                        </div>                  
-                    </div>
-                </div>
-
-
-            </div>
-
-        </section>
+            </div> 
+        </div>
+    </div>
+</section>
 
 
 
 
 
 
-        <?php $this->registerJs('
+<?php $this->registerJs('
     function init_click_handlers(){
         $("#activity-create-link").click(function(e) {
                 $.get(
@@ -211,6 +203,19 @@ Modal::end();
                     }
                 );
             });
+            $(".fc-day-top").click(function(e) {
+              var date = $(this).attr("data-date");
+                    $.get(
+                        "?r=event/create",{date:date},
+                        function (data)
+                        {
+                            $("#activity-modal").find(".modal-body").html(data);
+                            $(".modal-body").html(data);
+                            $(".modal-title").html("เพิ่มข้อมูลสมาชิก");
+                            $("#activity-modal").modal("show");
+                        }
+                    );
+                });
     }
     init_click_handlers(); //first run
     $("#customer_pjax_id").on("pjax:success", function() {
@@ -218,4 +223,4 @@ Modal::end();
     });
 
 ');
-        ?>
+?>
