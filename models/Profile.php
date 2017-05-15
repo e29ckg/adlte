@@ -25,7 +25,9 @@ class profile extends \yii\db\ActiveRecord {
             ['fullname', 'unique', 'targetAttribute' => ['fullname'], 'message' => 'ชื่อ-สกุล ซ้ำ'],
             [['user_id'], 'integer'],
             [['birthday', 'create_at'], 'safe'],
-            [['id_card', 'fullname', 'dep'], 'string', 'max' => 255],
+            [['id_card', 'fullname', 'dep','address'], 'string', 'max' => 255],
+            [['bloodtype'], 'string', 'max' => 50],
+            [['postcode'], 'string', 'max' => 5],
             [['user_id'], 'unique'],
             [['img'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
         ];
@@ -45,12 +47,16 @@ class profile extends \yii\db\ActiveRecord {
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
-            'id_card' => 'Id Card',
+            'id_card' => 'เลขบัตรประชาชน',
             'fullname' => 'ชื่อ-สกุล',
             'dep' => 'ตำแหน่ง',
-            'birthday' => 'Birthday',
-            'img' => 'Img',
-            'create_at' => 'Create At',
+            'birthday' => 'วันเกิด',
+            'img' => 'รูปถ่าย',
+            'create_at' => 'วันที่บันทึก',
+            'phone' => 'โทรศัพท์',
+            'bloodtype' => 'กรุ๊ปเลือด',
+            'address' => 'ที่อยู่',
+            'postcode' => 'รหัสไปรษณีย์',
         ];
     }
 
@@ -59,7 +65,7 @@ class profile extends \yii\db\ActiveRecord {
     }
 
     public function getDepname($id = null) {
-        
+
         if ($depName = Dep::findOne($id)) {
             return $depName->name;
         } else {
@@ -102,16 +108,26 @@ class profile extends \yii\db\ActiveRecord {
 
     public function getPhotoViewer() {
 //        return empty($this->img) ? Yii::getAlias('@web') . '/' . $this->upload_folder . '/none.png' : $this->getUploadUrl() . $this->img;
-        return empty($this->img) ? $this->getUploadUrl(). '/none.png' : $this->getUploadUrl() . $this->img;
+        return empty($this->img) ? $this->getUploadUrl() . '/none.png' : $this->getUploadUrl() . $this->img;
     }
 
     public function delphoto($photo) {
         if ($photo !== null) {
 //            unlink(Yii::getAlias('@webroot') . '/' . $this->upload_folder . '/' . $photo);
-            unlink($_SERVER['DOCUMENT_ROOT']  . '/' . $this->upload_folder . '/' . $photo);
+            unlink($_SERVER['DOCUMENT_ROOT'] . '/' . $this->upload_folder . '/' . $photo);
             return true;
         }
         return FALSE;
+    }
+    
+    
+    public function getBloodtypelist() {
+        return ([
+            'A' => 'A',
+            'A' => 'A',
+            'A' => 'A',
+            'A' => 'A',
+        ]);
     }
 
 }

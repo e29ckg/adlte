@@ -15,11 +15,11 @@ use dosamigos\datepicker\DatePicker;
 
 <div class="box">
     <div class="box-body">
-        
+
         <div class="box-body">
             <?php
             $form = ActiveForm::begin([
-                'enableAjaxValidation' => true,
+                        'enableAjaxValidation' => true,
                         'options' => [
                             'enctype' => 'multipart/form-data',
                             'class' => 'form-horizontal'
@@ -60,23 +60,29 @@ use dosamigos\datepicker\DatePicker;
                 ]
             ]);
             ?>
+            <?= $form->field($model, 'bloodtype')->dropDownList(['A' => 'A','B' => 'B','AB' => 'AB','O' => 'O',]) ?>  
+            <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'postcode')->textInput(['maxlength' => true]) ?>
+
+
             <div class="row">
                 <div class="col-md-2">
                     <div class="well text-center">
-<?= Html::img($model->getPhotoViewer(), ['style' => 'width:100px;', 'class' => 'img-rounded']); ?>
+                        <?= Html::img($model->getPhotoViewer(), ['style' => 'width:100px;', 'class' => 'img-rounded']); ?>
                     </div>
                 </div>
                 <div class="col-md-10">
-            <?= $form->field($model, 'img')->fileInput() ?>
+                    <?= $form->field($model, 'img')->fileInput() ?>
                 </div>
             </div>
 
 
             <div class="form-actions">
-            <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+                <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
             </div>
 
-<?php ActiveForm::end(); ?>
+            <?php ActiveForm::end(); ?>
         </div>
     </div>
 </div>

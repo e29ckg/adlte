@@ -19,25 +19,15 @@ Modal::begin([
 Modal::end();
 ?>
 
-<section class="content">
-    <!--<div class="row">-->
-    <!--<div class="pad margin no-print">-->
-    <!--            <div class="callout callout-info" style="margin-bottom: 0!important;">
-                    <h4><i class="fa fa-info"></i> Note:</h4>
-                    <marquee scrollamount="5"><h4>ความเร็วในการวิ่ง 5 ทดสอบอักษรวิ่ง
-                            This page has been enhanced for printing. Click the print button at the bottom of the invoice to test.
-                        </h4>
-                    </marquee>
-                </div>-->
-    <!--</div>-->
-    <!--</div>-->
+
     <div class="row">
         <div class="col-md-12">
         <div class="callout callout-info" style="margin-bottom: 10px">
             <h4><i class="fa fa-info"></i> Note:</h4>
-            <marquee scrollamount="5"><h4>ความเร็วในการวิ่ง 5 ทดสอบอักษรวิ่ง
+                <marquee scrollamount="5">
+                ความเร็วในการวิ่ง 5 ทดสอบอักษรวิ่ง
                     This page has been enhanced for printing. Click the print button at the bottom of the invoice to test.
-                </h4>
+               
             </marquee>
         </div>
             </div>
@@ -176,4 +166,4 @@ Modal::end();
 
 
     </div>
-</section>
+
