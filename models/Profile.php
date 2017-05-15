@@ -6,10 +6,11 @@ use Yii;
 use app\models\Userdt;
 use app\models\Dep;
 use yii\web\UploadedFile;
+use yii\helpers\Url;
 
 class profile extends \yii\db\ActiveRecord {
 
-    public $upload_foler = 'uploads/img/user';
+    public $upload_folder = 'uploads/img/user';
 
     public static function tableName() {
         return 'profile';
@@ -56,12 +57,16 @@ class profile extends \yii\db\ActiveRecord {
     public function getUser() {
         return $this->hasOne(Userdt::className(), ['id' => 'user_id']);
     }
-    
-    public function getDepname($id) {
-        $depName = Dep::findOne($id);
-        return $depName->name;
+
+    public function getDepname($id = null) {
+        
+        if ($depName = Dep::findOne($id)) {
+            return $depName->name;
+        } else {
+            return NULL;
+        }
     }
-    
+
     public function getFullname() {
         return $this->fullname;
     }
@@ -86,20 +91,24 @@ class profile extends \yii\db\ActiveRecord {
     }
 
     public function getUploadPath() {
-        return Yii::getAlias('@webroot') . '/' . $this->upload_foler . '/';
+        //return Yii::getAlias('@webroot') . '/' . $this->upload_folder . '/';
+        return $_SERVER['DOCUMENT_ROOT'] . '/' . $this->upload_folder . '/';
     }
 
     public function getUploadUrl() {
-        return Yii::getAlias('@web') . '/' . $this->upload_foler . '/';
+//        return Yii::getAlias('@web') . '/' . $this->upload_folder . '/';
+        return '/' . $this->upload_folder . '/';
     }
 
     public function getPhotoViewer() {
-        return empty($this->img) ? Yii::getAlias('@web') . '/' . $this->upload_foler . '/none.png' : $this->getUploadUrl() . $this->img;
+//        return empty($this->img) ? Yii::getAlias('@web') . '/' . $this->upload_folder . '/none.png' : $this->getUploadUrl() . $this->img;
+        return empty($this->img) ? $this->getUploadUrl(). '/none.png' : $this->getUploadUrl() . $this->img;
     }
 
     public function delphoto($photo) {
         if ($photo !== null) {
-            unlink(Yii::getAlias('@webroot') . '/' . $this->upload_foler . '/'. $photo);
+//            unlink(Yii::getAlias('@webroot') . '/' . $this->upload_folder . '/' . $photo);
+            unlink($_SERVER['DOCUMENT_ROOT']  . '/' . $this->upload_folder . '/' . $photo);
             return true;
         }
         return FALSE;
