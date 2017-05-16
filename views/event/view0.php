@@ -17,7 +17,4 @@ use yii\helpers\Html;
               </p>
             
             </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
-        </div>
+         
