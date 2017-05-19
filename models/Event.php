@@ -28,10 +28,10 @@ class Event extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'description', 'create_date'], 'required'],
+            [['title', 'create_date'], 'required'],
             [['description'], 'string'],
-            [['create_date'], 'safe'],
-            [['title'], 'string', 'max' => 255],
+            [['create_date','end_date'], 'safe'],
+            [['title','color'], 'string', 'max' => 255],
         ];
     }
 
@@ -44,7 +44,9 @@ class Event extends \yii\db\ActiveRecord
             'id' => 'ID',
             'title' => 'ชื่อกิจกรรม',
             'description' => 'รายละเอียด',
-            'create_date' => 'วันที่และเวลา',
+            'create_date' => 'เริ่มกิจกรรมวันที่และเวลา',
+            'end_date' => 'สิ้นสุดกิจกรรมวันที่',
+            'color' => 'สี',
         ];
     }
 }
