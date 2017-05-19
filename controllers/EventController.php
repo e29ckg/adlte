@@ -55,7 +55,8 @@ class EventController extends Controller {
             $Event->id = $eve->id;
             $Event->title = $eve->title;
             $Event->start = date('Y-m-d\TH:i:s\Z', strtotime($eve->create_date));
-            //$Event->end = date('Y-m-d\TH:i:s\Z',strtotime($eve->date_end.' '.$eve->time_end));
+            $Event->end = date('Y-m-d\TH:i:s\Z',strtotime($eve->end_date));
+            $Event->color = $eve->color;
 
             $tasks[] = $Event;
         }
